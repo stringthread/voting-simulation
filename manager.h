@@ -16,6 +16,7 @@ public:
 	bool output(string str, bool nl = false);
 	Agent agent[Agent::N];
 	int n_v[N_GAMES][2];//A,B‚»‚ê‚¼‚ê‚Ì“Š•[”
+	int ave_n_v[2] = {0,0};//“Š•[Ò‚Éè‚ß‚éA,B‚Ì”ä—¦‚ğŠe‰ñ•½‹Ï‚µ‚½‚à‚Ì
 	int i_game=0;//100‰ñ‚Ì“Š•[‚Ì‚¤‚¿A‰½‰ñ–Ú‚Ì“Š•[‚©(0-index)
 	float f_n_inf(float x);//x: ‘O‰ñ‚É“Š•[‚µ‚½l‚Ì’†‚ÌA‚Ü‚½‚ÍB‚ÌŠ„‡Breturn: Å‘å’l=1‚Æ‚µ‚Ä³‹K‰»‚³‚ê‚½“Š•[‰e‹¿—Í
 	const char* filename = ".\\out.csv";

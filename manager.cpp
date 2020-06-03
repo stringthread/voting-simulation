@@ -31,6 +31,8 @@ void Manager::do_game() {
 		for (int i = 0; i < 100; i++) {
 			n_v[i_game][agent[i].get_type()]+=agent[i].do_vote();
 		}
+		ave_n_v[0] = float(ave_n_v[0]*i_game+(float(n_v[i_game][0])/(n_v[i_game][0]+n_v[i_game][1])))/(i_game+1);
+		ave_n_v[1] = float(ave_n_v[1] * i_game + (float(n_v[i_game][1]) / (n_v[i_game][0] + n_v[i_game][1]))) / (i_game + 1);
 		uint8_t loser;
 		float share;
 		if (n_v[i_game][0] > n_v[i_game][1]) {
@@ -46,20 +48,21 @@ void Manager::do_game() {
 		for (int i = 0; i < 100; i++) {
 			if (agent[i].get_type() != loser)agent[i].add_score(share);
 		}
-		output(to_string(n_v[i_game][0]/*+n_v[i_game][1]*/),i_game==N_GAMES-1);
 	}
+	output(to_string(float(n_v[N_GAMES-1][0])/Agent::n_a));
+	output(to_string(float(n_v[N_GAMES-1][1])/(Agent::N-Agent::n_a)),true);
 }
 float Manager::influence(uint8_t type) {
 	float ret = (float)M / (type == 0 ? (Agent::n_a) : (Agent::N - Agent::n_a));
 	if (i_game == 0) {
 		ret *= f_n_inf((float)(type==0?(Agent::n_a):(Agent::N-Agent::n_a)) / (Agent::N));
 	} else {
-		ret *= f_n_inf((float)(n_v[i_game - 1][type]) / (n_v[i_game - 1][0] + n_v[i_game - 1][1]));
+		ret *= f_n_inf(ave_n_v[type]);
 	}
 	return ret;
 }
 float Manager::f_n_inf(float x) {
-	return 1.f - pow(x, 2);
+	return 1.f - pow(x-0.5f, (x>0.5f?2:4));
 }
 bool Manager::output(string str,bool nl) {
 	if (!ofs)return false;
